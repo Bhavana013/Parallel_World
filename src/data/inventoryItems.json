@@ -1,0 +1,57 @@
+[
+  {
+    "id": "item-1",
+    "name": "Celestial Oak Seed",
+    "category": "seed",
+    "description": "An ancient seed infused with starlight. Grows rapidly when exposed to fresh air.",
+    "iconName": "Sprout",
+    "quantity": 3,
+    "rarity": "rare",
+    "realityEffect": "Absorbs 50kg of carbon monoxide instantly.",
+    "fantasyTransformation": "Grows into a 100-foot bioluminescent sky tree."
+  },
+  {
+    "id": "item-2",
+    "name": "Solar Moisture Sprayer",
+    "category": "tool",
+    "description": "Powered by miniature solar cells. Emits fine micro-mist for optimal hydration.",
+    "iconName": "Droplets",
+    "quantity": 1,
+    "rarity": "common",
+    "realityEffect": "Water plants with 50% less water wastage.",
+    "fantasyTransformation": "Spawns rainbow rain showers in the fantasy realm."
+  },
+  {
+    "id": "item-3",
+    "name": "Silver Fox Companion",
+    "category": "creature",
+    "description": "Rescued from a poacher snare in Level 7. A loyal magical spirit pet.",
+    "iconName": "Dog",
+    "quantity": 1,
+    "rarity": "epic",
+    "realityEffect": "Helps locate hidden seeds in soil.",
+    "fantasyTransformation": "Transforms into a starry nine-tailed fox guardian."
+  },
+  {
+    "id": "item-4",
+    "name": "Prism Essence Orb",
+    "category": "artifact",
+    "description": "Contains condensed positive environmental energy collected from completed quests.",
+    "iconName": "Sparkles",
+    "quantity": 5,
+    "rarity": "legendary",
+    "realityEffect": "Neutralizes toxic soil acidity around a 10m radius.",
+    "fantasyTransformation": "Unlocks floating crystal islands and auroras."
+  },
+  {
+    "id": "item-5",
+    "name": "Elixir of Vitality",
+    "category": "potion",
+    "description": "Distilled from mountain spring water and wild clover.",
+    "iconName": "FlaskConical",
+    "quantity": 2,
+    "rarity": "common",
+    "realityEffect": "Restores 50 Positive Energy points.",
+    "fantasyTransformation": "Instantly boosts fantasy growth rate by 5%."
+  }
+]

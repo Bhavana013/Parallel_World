@@ -1,0 +1,75 @@
+[
+  {
+    "id": "ach-1",
+    "title": "First Seed Planted",
+    "description": "Plant your very first tree in the Reality World.",
+    "badgeIcon": "Sprout",
+    "category": "eco",
+    "unlocked": true,
+    "unlockedAt": "2026-07-31",
+    "progress": 1,
+    "maxProgress": 1,
+    "rewardCoins": 100,
+    "rewardXP": 150
+  },
+  {
+    "id": "ach-2",
+    "title": "Master Planter",
+    "description": "Plant 25 trees across all level play sessions.",
+    "badgeIcon": "Trees",
+    "category": "eco",
+    "unlocked": false,
+    "progress": 5,
+    "maxProgress": 25,
+    "rewardCoins": 300,
+    "rewardXP": 500
+  },
+  {
+    "id": "ach-3",
+    "title": "River Savior",
+    "description": "Clear all sludge barriers in the River Stream level.",
+    "badgeIcon": "Waves",
+    "category": "puzzle",
+    "unlocked": false,
+    "progress": 0,
+    "maxProgress": 1,
+    "rewardCoins": 250,
+    "rewardXP": 400
+  },
+  {
+    "id": "ach-4",
+    "title": "3-Star Champion",
+    "description": "Earn 3 stars on at least 5 different game levels.",
+    "badgeIcon": "Star",
+    "category": "mastery",
+    "unlocked": false,
+    "progress": 1,
+    "maxProgress": 5,
+    "rewardCoins": 500,
+    "rewardXP": 800
+  },
+  {
+    "id": "ach-5",
+    "title": "7-Day Eco Streak",
+    "description": "Log in to Parallel Worlds for 7 consecutive days.",
+    "badgeIcon": "Flame",
+    "category": "streak",
+    "unlocked": false,
+    "progress": 1,
+    "maxProgress": 7,
+    "rewardCoins": 400,
+    "rewardXP": 600
+  },
+  {
+    "id": "ach-6",
+    "title": "Fantasy Paradise",
+    "description": "Achieve 100% Fantasy World Growth.",
+    "badgeIcon": "Crown",
+    "category": "mastery",
+    "unlocked": false,
+    "progress": 10,
+    "maxProgress": 100,
+    "rewardCoins": 1000,
+    "rewardXP": 2000
+  }
+]

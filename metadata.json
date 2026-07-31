@@ -1,0 +1,6 @@
+{
+  "name": "Parallel Worlds",
+  "description": "A production-ready browser game where positive actions in a damaged Reality World transform a vibrant parallel Fantasy World.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

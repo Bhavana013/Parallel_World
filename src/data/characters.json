@@ -1,0 +1,66 @@
+[
+  {
+    "id": "char-1",
+    "name": "Kaelen Emberleaf",
+    "title": "Eco Guardian",
+    "avatarUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80",
+    "bgGradient": "from-emerald-600 via-teal-700 to-cyan-900",
+    "accentColor": "#10b981",
+    "stats": {
+      "natureMagic": 85,
+      "ecoPower": 90,
+      "stamina": 75,
+      "wisdom": 80
+    },
+    "specialPerk": "Tree Whisperer: Earns +25% XP on Tree Planting & Garden levels.",
+    "bio": "A former botany student who discovered an ancient pendant capable of sensing ecological disruption across dimensions."
+  },
+  {
+    "id": "char-2",
+    "name": "Aria Tidecaller",
+    "title": "River Mystic",
+    "avatarUrl": "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=400&q=80",
+    "bgGradient": "from-cyan-600 via-blue-700 to-indigo-900",
+    "accentColor": "#06b6d4",
+    "stats": {
+      "natureMagic": 95,
+      "ecoPower": 70,
+      "stamina": 80,
+      "wisdom": 90
+    },
+    "specialPerk": "Purity Wave: Cleans rivers and waters plants with +30% positive energy bonus.",
+    "bio": "Guardian of forgotten waterways, Aria channels celestial water magic to purify corrupted streams in Reality."
+  },
+  {
+    "id": "char-3",
+    "name": "Silvan Shadowmoss",
+    "title": "Forest Ranger",
+    "avatarUrl": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80",
+    "bgGradient": "from-amber-700 via-emerald-800 to-green-950",
+    "accentColor": "#84cc16",
+    "stats": {
+      "natureMagic": 70,
+      "ecoPower": 95,
+      "stamina": 95,
+      "wisdom": 85
+    },
+    "specialPerk": "Beast Affinity: Rescues trapped animals instantly with higher coin rewards.",
+    "bio": "A wilderness tracker who survived the Great Smog. Silvan protects endangered wildlife and constructs living bridges."
+  },
+  {
+    "id": "char-4",
+    "name": "Zephyr Sunflare",
+    "title": "Solar Alchemist",
+    "avatarUrl": "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=400&q=80",
+    "bgGradient": "from-violet-600 via-purple-800 to-fuchsia-950",
+    "accentColor": "#a855f7",
+    "stats": {
+      "natureMagic": 90,
+      "ecoPower": 85,
+      "stamina": 85,
+      "wisdom": 95
+    },
+    "specialPerk": "Portal Master: Reduces portal cooldowns and boosts overall Fantasy Growth Rate.",
+    "bio": "A quantum eco-physicist who synthesized the dimensional rift, allowing mortal actions to echo into the ether."
+  }
+]

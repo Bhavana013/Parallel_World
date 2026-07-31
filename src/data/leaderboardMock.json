@@ -1,0 +1,57 @@
+[
+  {
+    "rank": 1,
+    "username": "IIT_Bombay_EcoKing",
+    "characterName": "Kaelen Emberleaf",
+    "level": 12,
+    "xp": 4850,
+    "fantasyGrowthPercentage": 100,
+    "positiveEnergy": 1250,
+    "badgesCount": 6,
+    "isCurrentUser": false
+  },
+  {
+    "rank": 2,
+    "username": "IIT_Delhi_Aria",
+    "characterName": "Aria Tidecaller",
+    "level": 10,
+    "xp": 4120,
+    "fantasyGrowthPercentage": 90,
+    "positiveEnergy": 980,
+    "badgesCount": 5,
+    "isCurrentUser": false
+  },
+  {
+    "rank": 3,
+    "username": "IIT_Madras_GreenTech",
+    "characterName": "Silvan Shadowmoss",
+    "level": 9,
+    "xp": 3680,
+    "fantasyGrowthPercentage": 80,
+    "positiveEnergy": 850,
+    "badgesCount": 4,
+    "isCurrentUser": false
+  },
+  {
+    "rank": 4,
+    "username": "IIT_Kharagpur_Nova",
+    "characterName": "Zephyr Sunflare",
+    "level": 8,
+    "xp": 3100,
+    "fantasyGrowthPercentage": 70,
+    "positiveEnergy": 720,
+    "badgesCount": 4,
+    "isCurrentUser": false
+  },
+  {
+    "rank": 5,
+    "username": "You (Eco Hero)",
+    "characterName": "Kaelen Emberleaf",
+    "level": 1,
+    "xp": 200,
+    "fantasyGrowthPercentage": 10,
+    "positiveEnergy": 100,
+    "badgesCount": 1,
+    "isCurrentUser": true
+  }
+]
