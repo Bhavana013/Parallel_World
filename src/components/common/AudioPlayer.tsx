@@ -1,19 +1,35 @@
 import React, { useState } from 'react';
 import { useGame } from '../../context/GameContext';
-import { Volume2, VolumeX, Music, CloudRain, Wind, Sparkles, SlidersHorizontal, X } from 'lucide-react';
+import { Volume2, VolumeX, Music, Mic, SlidersHorizontal, X, Sparkles } from 'lucide-react';
 import { audioEngine } from '../../utils/audioEngine';
 
 export const AudioPlayer: React.FC = () => {
   const { audioSettings, updateAudioSettings } = useGame();
   const [isOpen, setIsOpen] = useState(false);
+  const [isMusicPlaying, setIsMusicPlaying] = useState(false);
+  const [voiceOn, setVoiceOn] = useState(true);
 
   const toggleMute = () => {
     updateAudioSettings({ muted: !audioSettings.muted });
   };
 
-  const handleAmbienceChange = (type: 'nature' | 'rain' | 'wind' | 'crystal' | 'none') => {
-    updateAudioSettings({ activeAmbience: type });
-    audioEngine.setAmbience(type);
+  const handleToggleMusic = () => {
+    if (isMusicPlaying) {
+      audioEngine.stopBackgroundMusic();
+      setIsMusicPlaying(false);
+    } else {
+      audioEngine.startBackgroundMusic();
+      setIsMusicPlaying(true);
+    }
+  };
+
+  const handleToggleVoice = () => {
+    const nextState = !voiceOn;
+    setVoiceOn(nextState);
+    audioEngine.toggleVoice(nextState);
+    if (nextState) {
+      audioEngine.speak('Speech Narration Active!');
+    }
   };
 
   return (
@@ -25,14 +41,14 @@ export const AudioPlayer: React.FC = () => {
             audioEngine.init();
             setIsOpen(true);
           }}
-          className="flex items-center gap-2 px-3 py-2 bg-slate-900/80 hover:bg-slate-800 border border-slate-700/60 backdrop-blur-md rounded-full shadow-lg text-slate-200 text-xs font-semibold transition-all hover:scale-105"
+          className="flex items-center gap-2 px-3.5 py-2 bg-slate-900/90 hover:bg-slate-800 border border-slate-700/80 backdrop-blur-md rounded-full shadow-xl text-slate-200 text-xs font-semibold transition-all hover:scale-105"
         >
           {audioSettings.muted ? (
             <VolumeX className="w-4 h-4 text-red-400" />
           ) : (
             <Volume2 className="w-4 h-4 text-emerald-400 animate-pulse" />
           )}
-          <span className="hidden sm:inline">Audio Synthesizer</span>
+          <span className="hidden sm:inline">Fantasy Audio & Voice</span>
         </button>
       )}
 
@@ -42,7 +58,7 @@ export const AudioPlayer: React.FC = () => {
           <div className="flex items-center justify-between border-b border-slate-800 pb-3">
             <div className="flex items-center gap-2 font-bold text-sm text-emerald-400">
               <SlidersHorizontal className="w-4 h-4" />
-              <span>Procedural Sound Engine</span>
+              <span>Enchanting Audio Synthesizer</span>
             </div>
             <div className="flex items-center gap-2">
               <button
@@ -61,11 +77,38 @@ export const AudioPlayer: React.FC = () => {
             </div>
           </div>
 
+          {/* Quick Action Toggles */}
+          <div className="grid grid-cols-2 gap-2">
+            <button
+              onClick={handleToggleMusic}
+              className={`p-2.5 rounded-xl border text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
+                isMusicPlaying
+                  ? 'bg-emerald-500/20 border-emerald-500 text-emerald-300'
+                  : 'bg-slate-950 border-slate-800 text-slate-400'
+              }`}
+            >
+              <Music className="w-4 h-4 text-emerald-400" />
+              <span>{isMusicPlaying ? 'Pause Music' : 'Play Music'}</span>
+            </button>
+
+            <button
+              onClick={handleToggleVoice}
+              className={`p-2.5 rounded-xl border text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
+                voiceOn
+                  ? 'bg-cyan-500/20 border-cyan-500 text-cyan-300'
+                  : 'bg-slate-950 border-slate-800 text-slate-400'
+              }`}
+            >
+              <Mic className="w-4 h-4 text-cyan-400" />
+              <span>{voiceOn ? 'Voice On' : 'Voice Off'}</span>
+            </button>
+          </div>
+
           {/* Volume Sliders */}
           <div className="flex flex-col gap-3 text-xs">
             <div>
               <div className="flex justify-between mb-1 text-slate-400">
-                <span>Master Volume</span>
+                <span>Master Synthesizer</span>
                 <span>{Math.round(audioSettings.masterVolume * 100)}%</span>
               </div>
               <input
@@ -81,7 +124,7 @@ export const AudioPlayer: React.FC = () => {
 
             <div>
               <div className="flex justify-between mb-1 text-slate-400">
-                <span>Ambient Music Chords</span>
+                <span>Fantasy Background Music (Flute, Harp, Celesta)</span>
                 <span>{Math.round(audioSettings.musicVolume * 100)}%</span>
               </div>
               <input
@@ -93,76 +136,6 @@ export const AudioPlayer: React.FC = () => {
                 onChange={(e) => updateAudioSettings({ musicVolume: parseFloat(e.target.value) })}
                 className="w-full accent-cyan-500 h-1.5 bg-slate-800 rounded-lg cursor-pointer"
               />
-            </div>
-
-            <div>
-              <div className="flex justify-between mb-1 text-slate-400">
-                <span>Sound Effects (SFX)</span>
-                <span>{Math.round(audioSettings.sfxVolume * 100)}%</span>
-              </div>
-              <input
-                type="range"
-                min="0"
-                max="1"
-                step="0.05"
-                value={audioSettings.sfxVolume}
-                onChange={(e) => updateAudioSettings({ sfxVolume: parseFloat(e.target.value) })}
-                className="w-full accent-amber-500 h-1.5 bg-slate-800 rounded-lg cursor-pointer"
-              />
-            </div>
-          </div>
-
-          {/* Nature Soundscapes Switcher */}
-          <div className="pt-2 border-t border-slate-800">
-            <span className="text-xs text-slate-400 block mb-2 font-medium">Environmental Soundscape</span>
-            <div className="grid grid-cols-2 gap-2">
-              <button
-                onClick={() => handleAmbienceChange('nature')}
-                className={`flex items-center gap-2 p-2 rounded-lg text-xs font-medium transition-all ${
-                  audioSettings.activeAmbience === 'nature'
-                    ? 'bg-emerald-600/30 border border-emerald-500 text-emerald-300'
-                    : 'bg-slate-800/60 border border-slate-700/50 text-slate-400 hover:text-white'
-                }`}
-              >
-                <Music className="w-3.5 h-3.5 text-emerald-400" />
-                <span>Birds & Wind</span>
-              </button>
-
-              <button
-                onClick={() => handleAmbienceChange('rain')}
-                className={`flex items-center gap-2 p-2 rounded-lg text-xs font-medium transition-all ${
-                  audioSettings.activeAmbience === 'rain'
-                    ? 'bg-cyan-600/30 border border-cyan-500 text-cyan-300'
-                    : 'bg-slate-800/60 border border-slate-700/50 text-slate-400 hover:text-white'
-                }`}
-              >
-                <CloudRain className="w-3.5 h-3.5 text-cyan-400" />
-                <span>Soothing Rain</span>
-              </button>
-
-              <button
-                onClick={() => handleAmbienceChange('wind')}
-                className={`flex items-center gap-2 p-2 rounded-lg text-xs font-medium transition-all ${
-                  audioSettings.activeAmbience === 'wind'
-                    ? 'bg-blue-600/30 border border-blue-500 text-blue-300'
-                    : 'bg-slate-800/60 border border-slate-700/50 text-slate-400 hover:text-white'
-                }`}
-              >
-                <Wind className="w-3.5 h-3.5 text-blue-400" />
-                <span>Mountain Wind</span>
-              </button>
-
-              <button
-                onClick={() => handleAmbienceChange('crystal')}
-                className={`flex items-center gap-2 p-2 rounded-lg text-xs font-medium transition-all ${
-                  audioSettings.activeAmbience === 'crystal'
-                    ? 'bg-purple-600/30 border border-purple-500 text-purple-300'
-                    : 'bg-slate-800/60 border border-slate-700/50 text-slate-400 hover:text-white'
-                }`}
-              >
-                <Sparkles className="w-3.5 h-3.5 text-purple-400" />
-                <span>Crystal Realm</span>
-              </button>
             </div>
           </div>
         </div>

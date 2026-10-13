@@ -3,9 +3,19 @@ import { useGame } from '../../context/GameContext';
 import { ParticleCanvas } from '../common/ParticleCanvas';
 import initialCharacters from '../../data/characters.json';
 import { Check, Sparkles, Shield, Zap, Heart, BookOpen, ArrowRight } from 'lucide-react';
+import { CartoonCharacterAvatar } from '../cartoon/CartoonCharacterAvatar';
+import { CharacterAnimationViewer } from '../cartoon/CharacterAnimationViewer';
+import { audioEngine } from '../../utils/audioEngine';
 
 export const CharacterSelectPage: React.FC = () => {
   const { playerStats, selectCharacter, setActivePage } = useGame();
+
+  const activeChar = initialCharacters.find(c => c.id === playerStats.characterId) || initialCharacters[0];
+
+  const handleCharSelect = (id: string, name: string) => {
+    selectCharacter(id);
+    audioEngine.narrateCharacterSelect(name);
+  };
 
   return (
     <div className="relative min-h-[calc(100vh-4rem)] bg-slate-950 text-slate-100 p-4 sm:p-6 lg:p-8">
@@ -13,17 +23,19 @@ export const CharacterSelectPage: React.FC = () => {
 
       <div className="relative z-10 max-w-6xl mx-auto flex flex-col gap-8">
         
+        {/* Title Header */}
         <div className="text-center max-w-2xl mx-auto flex flex-col gap-2">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-bold uppercase tracking-wider mx-auto">
             <Sparkles className="w-4 h-4" />
-            <span>Eco Guardians Assembly</span>
+            <span>Cartoon Eco Guardians Assembly</span>
           </div>
-          <h1 className="text-3xl sm:text-4xl font-black">Choose Your Guardian</h1>
+          <h1 className="text-3xl sm:text-4xl font-black">Choose Your Guardian Hero</h1>
           <p className="text-xs sm:text-sm text-slate-400">
-            Each guardian possesses unique elemental affinities and gameplay perks across Parallel Worlds.
+            Each guardian features full cartoon animation rigs, voice barks, and specialized elemental perks.
           </p>
         </div>
 
+        {/* Character Cards Grid with Cartoon Avatars */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {initialCharacters.map((char) => {
             const isSelected = playerStats.characterId === char.id;
@@ -31,39 +43,32 @@ export const CharacterSelectPage: React.FC = () => {
             return (
               <div
                 key={char.id}
-                onClick={() => selectCharacter(char.id)}
-                className={`group relative rounded-3xl overflow-hidden border-2 transition-all cursor-pointer flex flex-col justify-between ${
+                onClick={() => handleCharSelect(char.id, char.name)}
+                className={`group relative rounded-3xl overflow-hidden border-2 transition-all cursor-pointer flex flex-col justify-between p-5 ${
                   isSelected
                     ? 'border-emerald-400 bg-slate-900 shadow-2xl shadow-emerald-500/20 ring-4 ring-emerald-500/30 scale-[1.02]'
                     : 'border-slate-800 bg-slate-900/60 hover:border-slate-700 hover:scale-105'
                 }`}
               >
-                {/* Image Header */}
-                <div className="relative h-48 w-full overflow-hidden">
-                  <img
-                    src={char.avatarUrl}
-                    alt={char.name}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                {/* Cartoon Avatar Header */}
+                <div className="flex flex-col items-center gap-3 pt-2">
+                  <CartoonCharacterAvatar
+                    characterId={char.id}
+                    animationState={isSelected ? 'celebrate' : 'idle'}
+                    size="xl"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent" />
-                  
-                  {isSelected && (
-                    <div className="absolute top-3 right-3 w-8 h-8 rounded-full bg-emerald-500 text-slate-950 flex items-center justify-center shadow-lg font-bold">
-                      <Check className="w-5 h-5 stroke-[3]" />
-                    </div>
-                  )}
 
-                  <div className="absolute bottom-3 left-3 right-3">
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-400 bg-slate-950/80 px-2 py-0.5 rounded border border-emerald-500/30">
+                  <div className="text-center">
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-400 bg-slate-950/80 px-2.5 py-1 rounded-full border border-emerald-500/30">
                       {char.title}
                     </span>
-                    <h3 className="font-extrabold text-lg text-slate-100 mt-1">{char.name}</h3>
+                    <h3 className="font-extrabold text-lg text-slate-100 mt-2">{char.name}</h3>
                   </div>
                 </div>
 
                 {/* Content & Stats */}
-                <div className="p-5 flex flex-col gap-4">
-                  <p className="text-xs text-slate-300 leading-relaxed line-clamp-3">{char.bio}</p>
+                <div className="flex flex-col gap-4 mt-4">
+                  <p className="text-xs text-slate-300 leading-relaxed line-clamp-2">{char.bio}</p>
 
                   <div className="p-3 rounded-xl bg-slate-950/80 border border-slate-800 text-[11px] text-emerald-300 font-medium">
                     {char.specialPerk}
@@ -90,30 +95,20 @@ export const CharacterSelectPage: React.FC = () => {
                         <div className="h-full bg-cyan-400 rounded-full" style={{ width: `${char.stats.ecoPower}%` }} />
                       </div>
                     </div>
-
-                    <div>
-                      <div className="flex justify-between text-slate-400 mb-0.5">
-                        <span>Wisdom</span>
-                        <span>{char.stats.wisdom}%</span>
-                      </div>
-                      <div className="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
-                        <div className="h-full bg-amber-400 rounded-full" style={{ width: `${char.stats.wisdom}%` }} />
-                      </div>
-                    </div>
                   </div>
 
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
-                      selectCharacter(char.id);
+                      handleCharSelect(char.id, char.name);
                     }}
                     className={`w-full py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider transition-all ${
                       isSelected
-                        ? 'bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/20'
+                        ? 'bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/20 font-black'
                         : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
                     }`}
                   >
-                    {isSelected ? 'Selected Active Hero' : 'Select Guardian'}
+                    {isSelected ? 'Active Guardian' : 'Select Hero'}
                   </button>
                 </div>
               </div>
@@ -121,12 +116,24 @@ export const CharacterSelectPage: React.FC = () => {
           })}
         </div>
 
-        <div className="flex justify-center mt-4">
+        {/* Selected Hero Animation Controller Previewer */}
+        <div className="mt-4">
+          <CharacterAnimationViewer
+            characterId={activeChar.id}
+            characterName={activeChar.name}
+            specialPerk={activeChar.specialPerk}
+          />
+        </div>
+
+        <div className="flex justify-center mt-2">
           <button
-            onClick={() => setActivePage('dashboard')}
+            onClick={() => {
+              audioEngine.narratePlay();
+              setActivePage('dashboard');
+            }}
             className="flex items-center gap-2 px-8 py-3.5 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 text-slate-950 font-black text-xs uppercase tracking-wider shadow-lg shadow-emerald-500/20 hover:scale-105 transition-transform"
           >
-            <span>Proceed to Dashboard</span>
+            <span>Proceed to Game Dashboard</span>
             <ArrowRight className="w-4 h-4" />
           </button>
         </div>

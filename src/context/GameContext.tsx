@@ -17,6 +17,8 @@ interface GameContextType {
   setSelectedLevel: (level: LevelConfig | null) => void;
   activeCharacter: Character;
   selectCharacter: (charId: string) => void;
+  updatePlayerAvatar: (url: string) => void;
+  updateUsername: (name: string) => void;
   audioSettings: AudioSettings;
   updateAudioSettings: (newSettings: Partial<AudioSettings>) => void;
   completeLevel: (levelId: number, score: number, stars: number) => void;
@@ -47,12 +49,33 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
     activeAmbience: 'nature',
   });
 
-  const activeCharacter = initialCharacters.find(c => c.id === playerStats.characterId) || initialCharacters[0];
+  const baseCharacter = initialCharacters.find(c => c.id === playerStats.characterId) || initialCharacters[0];
+  const activeCharacter: Character = {
+    ...baseCharacter,
+    avatarUrl: playerStats.customAvatarUrl || baseCharacter.avatarUrl,
+  };
 
   useEffect(() => {
     // Auto-save whenever playerStats updates
     saveGameData(playerStats);
   }, [playerStats]);
+
+  const updatePlayerAvatar = (url: string) => {
+    setPlayerStats(prev => ({
+      ...prev,
+      customAvatarUrl: url,
+    }));
+    audioEngine.playClick();
+    addNotification('Profile picture updated from gallery!', 'success');
+  };
+
+  const updateUsername = (name: string) => {
+    setPlayerStats(prev => ({
+      ...prev,
+      username: name,
+    }));
+    addNotification(`Username updated to ${name}!`, 'info');
+  };
 
   useEffect(() => {
     // Sync audio engine volume settings
@@ -60,7 +83,6 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
       audioSettings.masterVolume,
       audioSettings.musicVolume,
       audioSettings.sfxVolume,
-      audioSettings.ambienceVolume,
       audioSettings.muted
     );
   }, [audioSettings]);
@@ -84,13 +106,7 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const updateAudioSettings = (newSettings: Partial<AudioSettings>) => {
-    setAudioSettings(prev => {
-      const updated = { ...prev, ...newSettings };
-      if (newSettings.activeAmbience !== undefined) {
-        audioEngine.setAmbience(updated.activeAmbience);
-      }
-      return updated;
-    });
+    setAudioSettings(prev => ({ ...prev, ...newSettings }));
   };
 
   const addNotification = (message: string, type: 'success' | 'info' | 'reward' = 'info') => {
@@ -235,6 +251,8 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setSelectedLevel,
         activeCharacter,
         selectCharacter,
+        updatePlayerAvatar,
+        updateUsername,
         audioSettings,
         updateAudioSettings,
         completeLevel,

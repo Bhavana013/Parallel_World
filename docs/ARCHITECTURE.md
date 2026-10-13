@@ -1,31 +1,51 @@
-# System Architecture - Parallel Worlds
+# Parallel Worlds - Full-Stack Architecture Documentation
 
-## 1. Architectural Overview
-Parallel Worlds follows a component-driven Single Page Application (SPA) architecture utilizing React 19, TypeScript, and Vite. State is managed via React Context Providers (`GameContext`, `AuthContext`) with modular utilities for audio synthesis, particle rendering, and storage persistence.
+## Overview
+**Parallel Worlds** is a dual-realm eco-restoration web application built with a full-stack architecture combining a high-performance **Express backend** and a modular **React + Vite frontend**. Real-world environmental actions directly drive ecological transformation across 5 distinct fantasy world stages.
+
+---
+
+## High-Level System Diagram
 
 ```
 +-----------------------------------------------------------------------+
-|                             React 19 SPA                              |
+|                           CLIENT (Browser)                            |
 |                                                                       |
-|  +--------------------+   +---------------------+  +---------------+  |
-|  |    Navbar / HUD    |   | GameRouter (Views)  |  | Audio Synth   |  |
-|  +--------------------+   +---------------------+  +---------------+  |
+|  +---------------------+  +--------------------+  +----------------+  |
+|  |  React 19 Frontend  |  | Speech Narration   |  | Web Audio      |  |
+|  |  (14 Page Views)    |  | Synthesizer API    |  | Synthesizer    |  |
+|  +----------+----------+  +---------+----------+  +-------+--------+  |
+|             |                       |                     |           |
++-------------|-----------------------|---------------------|-----------+
+              | (REST API Calls)      |                     |
+              v                       v                     v
++-----------------------------------------------------------------------+
+|                         SERVER (Node.js Container)                    |
 |                                                                       |
 |  +-----------------------------------------------------------------+  |
-|  | GameContext (PlayerStats, LevelProgression, AudioSettings)     |  |
+|  |                 Express 4 REST API Service                      |  |
+|  |  - GET /api/health          - GET  /api/player                  |  |
+|  |  - POST /api/player/update   - GET  /api/leaderboard             |  |
+|  |  - GET /api/companions      - GET  /api/world-stage             |  |
+|  +--------------------------------+--------------------------------+  |
+|                                   |                                   |
+|                                   v                                   |
 |  +-----------------------------------------------------------------+  |
-|                                                                       |
-|  +----------------------+   +------------------+   +---------------+  |
-|  | Web Audio API Synth  |   | Particle Canvas  |   | LocalStorage  |  |
-|  +----------------------+   +------------------+   +---------------+  |
+|  |                   In-Memory / Storage Engine                    |  |
+|  +-----------------------------------------------------------------+  |
 +-----------------------------------------------------------------------+
 ```
 
-## 2. Audio Architecture
-- **Engine**: Web Audio API (`AudioEngine` singleton)
-- **Node Graph**: OscillatorNode -> BiquadFilterNode -> GainNode -> MasterDestination
-- **Features**: Procedural birdsong, white noise rain filter, C-pentatonic music chords.
+---
 
-## 3. Graphics & Animation Architecture
-- **Canvas Overlay**: HTML5 2D Canvas rendering glowing fireflies, rain drops, blooming pollen.
-- **UI Transitions**: `motion` (Motion/React) layout spring animations and modal transitions.
+## Component Architecture
+
+1. **Frontend Layer**:
+   - **Framework**: React 18 / 19 with Vite, TypeScript & Tailwind CSS.
+   - **Audio Engine**: Synthesized Flute, Harp, Celesta, and SpeechSynthesis Voice Narration.
+   - **Cartoon Motion Rig**: Animated character state choices (`idle`, `walk`, `run`, `jump`, `celebrate`, `sleep`, `think`).
+   - **Particle Engine**: High-frequency HTML5 Canvas rendering magical sparkles, fireflies, and blooming pollen.
+
+2. **Backend Service Layer**:
+   - **Server**: Express.js server bundled via `esbuild` to `dist/server.cjs`.
+   - **Vite Integration**: In development mode, Vite runs as Express middleware (`middlewareMode: true`) listening on port `3000`. In production, Express serves compiled static dist files.

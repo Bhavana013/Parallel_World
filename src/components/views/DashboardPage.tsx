@@ -1,19 +1,19 @@
 import React from 'react';
 import { useGame } from '../../context/GameContext';
 import { ParticleCanvas } from '../common/ParticleCanvas';
+import { CartoonCharacterAvatar } from '../cartoon/CartoonCharacterAvatar';
+import { audioEngine } from '../../utils/audioEngine';
 import { 
   Play, 
   Sparkles, 
   Flame, 
   Zap, 
   Coins, 
-  Trophy, 
   ArrowRight, 
-  Layers, 
   CheckCircle2, 
   Globe2,
-  Calendar,
-  Award
+  Compass,
+  Heart
 } from 'lucide-react';
 import initialLevels from '../../data/levels.json';
 
@@ -22,18 +22,26 @@ export const DashboardPage: React.FC = () => {
 
   const currentLevelObj = initialLevels.find(l => l.id === playerStats.unlockedLevelId) || initialLevels[0];
 
+  const handlePlayLevel = () => {
+    audioEngine.narratePlay();
+    setSelectedLevel(currentLevelObj as any);
+    setActivePage('gameplay');
+  };
+
   return (
     <div className="relative min-h-[calc(100vh-4rem)] bg-slate-950 text-slate-100 p-4 sm:p-6 lg:p-8">
       <ParticleCanvas effectOverride="fireflies" />
 
       <div className="relative z-10 max-w-7xl mx-auto flex flex-col gap-8">
         
-        {/* Top Hero Hub Banner */}
+        {/* Top Hero Hub Banner with Cartoon Avatar */}
         <div className="relative rounded-3xl overflow-hidden border border-slate-800 bg-gradient-to-r from-slate-900 via-emerald-950/40 to-slate-900 p-6 sm:p-8 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-6">
-            <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-2xl overflow-hidden border-2 border-emerald-500 shadow-xl shrink-0">
-              <img src={activeCharacter.avatarUrl} alt={activeCharacter.name} className="w-full h-full object-cover" />
-            </div>
+            <CartoonCharacterAvatar
+              characterId={activeCharacter.id}
+              animationState="celebrate"
+              size="lg"
+            />
             <div className="flex flex-col gap-1">
               <div className="flex items-center gap-2">
                 <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 text-xs font-bold uppercase tracking-wider">
@@ -49,26 +57,38 @@ export const DashboardPage: React.FC = () => {
             </div>
           </div>
 
-          {/* Quick Launch Next Level */}
-          <button
-            onClick={() => {
-              setSelectedLevel(currentLevelObj as any);
-              setActivePage('gameplay');
-            }}
-            className="w-full md:w-auto flex items-center justify-center gap-3 px-8 py-4 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-black text-sm uppercase tracking-wider shadow-xl shadow-emerald-500/25 hover:scale-105 active:scale-95 transition-all"
-          >
-            <Play className="w-5 h-5 fill-slate-950" />
-            <span>PLAY LEVEL {playerStats.unlockedLevelId}: {currentLevelObj.subtitle}</span>
-          </button>
+          <div className="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto">
+            {/* Enter Fantasy World Anytime */}
+            <button
+              onClick={() => {
+                audioEngine.playClick();
+                audioEngine.speakContextual('Opening Living Fantasy Realm Landscape!', 'fantasy');
+                setActivePage('living-fantasy');
+              }}
+              className="w-full sm:w-auto flex items-center justify-center gap-2.5 px-6 py-4 rounded-2xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-black text-xs uppercase tracking-wider shadow-xl shadow-purple-600/30 hover:scale-105 active:scale-95 transition-all"
+            >
+              <Sparkles className="w-5 h-5 text-amber-300 animate-pulse" />
+              <span>ACCESS FANTASY REALM</span>
+            </button>
+
+            {/* Quick Launch Next Level */}
+            <button
+              onClick={handlePlayLevel}
+              className="w-full sm:w-auto flex items-center justify-center gap-2.5 px-6 py-4 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-black text-xs uppercase tracking-wider shadow-xl shadow-emerald-500/25 hover:scale-105 active:scale-95 transition-all"
+            >
+              <Play className="w-5 h-5 fill-slate-950" />
+              <span>PLAY LEVEL {playerStats.unlockedLevelId}</span>
+            </button>
+          </div>
         </div>
 
         {/* Stats & Growth Matrix Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           
-          {/* Fantasy Realm Growth */}
+          {/* Fantasy Realm Growth & 5-Stage Link */}
           <div className="p-6 rounded-2xl bg-slate-900/80 border border-slate-800 backdrop-blur-md flex flex-col justify-between gap-4">
             <div className="flex items-center justify-between text-xs text-slate-400">
-              <span className="font-semibold uppercase tracking-wider">Fantasy Transformation</span>
+              <span className="font-semibold uppercase tracking-wider">5-Stage World Progression</span>
               <Sparkles className="w-4 h-4 text-cyan-400" />
             </div>
             <div>
@@ -81,11 +101,11 @@ export const DashboardPage: React.FC = () => {
               </div>
             </div>
             <button 
-              onClick={toggleWorld}
+              onClick={() => setActivePage('world-view')}
               className="text-xs font-bold text-cyan-400 hover:underline flex items-center gap-1 mt-1"
             >
-              <span>View Parallel Realm</span>
-              <ArrowRight className="w-3.5 h-3.5" />
+              <Compass className="w-3.5 h-3.5" />
+              <span>Explore 5 Progression Stages</span>
             </button>
           </div>
 
@@ -107,10 +127,13 @@ export const DashboardPage: React.FC = () => {
             </div>
             <div className="text-3xl font-black text-amber-400">{playerStats.coins}</div>
             <button 
-              onClick={() => setActivePage('inventory')}
+              onClick={() => {
+                audioEngine.playClick();
+                setActivePage('inventory');
+              }}
               className="text-xs font-bold text-amber-400 hover:underline flex items-center gap-1"
             >
-              <span>Open Vault & Store</span>
+              <span>Vault, Store & Companions</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>
@@ -139,7 +162,10 @@ export const DashboardPage: React.FC = () => {
               </div>
             </div>
             <button
-              onClick={() => setActivePage('level-select')}
+              onClick={() => {
+                audioEngine.playClick();
+                setActivePage('level-select');
+              }}
               className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold transition-all"
             >
               Full Interactive Map
@@ -156,6 +182,7 @@ export const DashboardPage: React.FC = () => {
                   key={lvl.id}
                   onClick={() => {
                     if (isUnlocked) {
+                      audioEngine.narratePlay();
                       setSelectedLevel(lvl as any);
                       setActivePage('gameplay');
                     }

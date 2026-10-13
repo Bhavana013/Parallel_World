@@ -7,11 +7,13 @@ import { ToastContainer } from './components/common/ToastContainer';
 import { AudioPlayer } from './components/common/AudioPlayer';
 
 import { LandingPage } from './components/views/LandingPage';
+import { AuthPage } from './components/views/AuthPage';
 import { AuthModal } from './components/views/AuthModal';
 import { DashboardPage } from './components/views/DashboardPage';
 import { CharacterSelectPage } from './components/views/CharacterSelectPage';
 import { StoryIntroPage } from './components/views/StoryIntroPage';
 import { WorldViewPage } from './components/views/WorldViewPage';
+import { LivingFantasyRealm } from './components/views/LivingFantasyRealm';
 import { LevelSelectPage } from './components/views/LevelSelectPage';
 import { GamePlayPage } from './components/views/GamePlayPage';
 import { InventoryPage } from './components/views/InventoryPage';
@@ -29,6 +31,8 @@ const GameRouter: React.FC = () => {
     switch (activePage) {
       case 'landing':
         return <LandingPage />;
+      case 'auth':
+        return <AuthPage />;
       case 'dashboard':
         return <DashboardPage />;
       case 'character-select':
@@ -37,6 +41,8 @@ const GameRouter: React.FC = () => {
         return <StoryIntroPage />;
       case 'world-view':
         return <WorldViewPage />;
+      case 'living-fantasy':
+        return <LivingFantasyRealm />;
       case 'level-select':
         return <LevelSelectPage />;
       case 'gameplay':

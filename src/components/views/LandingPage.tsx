@@ -61,19 +61,19 @@ export const LandingPage: React.FC = () => {
         {/* CTA Buttons */}
         <div className="flex flex-wrap items-center justify-center gap-4 mb-16">
           <button
-            onClick={() => setActivePage('story-intro')}
+            onClick={() => setActivePage('auth')}
             className="flex items-center gap-3 px-8 py-4 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-black text-base shadow-xl shadow-emerald-500/30 hover:scale-105 active:scale-95 transition-all"
           >
-            <Play className="w-5 h-5 fill-slate-950" />
-            <span>PLAY GAME & STORY</span>
+            <Sparkles className="w-5 h-5 fill-slate-950" />
+            <span>LOGIN / SIGN UP</span>
           </button>
 
           <button
-            onClick={() => setActivePage('level-select')}
+            onClick={() => setActivePage('story-intro')}
             className="flex items-center gap-2.5 px-6 py-4 rounded-2xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700/80 text-slate-200 font-bold text-base backdrop-blur-md hover:scale-105 transition-all"
           >
-            <Layers className="w-5 h-5 text-cyan-400" />
-            <span>EXPLORE 10 LEVELS</span>
+            <Play className="w-5 h-5 text-emerald-400" />
+            <span>PLAY STORY</span>
           </button>
         </div>
 

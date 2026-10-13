@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useGame } from '../../context/GameContext';
 import { ParticleCanvas } from '../common/ParticleCanvas';
+import { RewardChestModal } from '../cartoon/RewardChestModal';
 import { Level1_TreePlanting } from '../game/levels/Level1_TreePlanting';
 import { Level2_WateringPlants } from '../game/levels/Level2_WateringPlants';
 import { Level3_MemoryMatching } from '../game/levels/Level3_MemoryMatching';
@@ -11,17 +12,12 @@ import { Level7_AnimalRescue } from '../game/levels/Level7_AnimalRescue';
 import { Level8_TreasureHunt } from '../game/levels/Level8_TreasureHunt';
 import { Level9_GardenDecoration } from '../game/levels/Level9_GardenDecoration';
 import { Level10_MazeEscape } from '../game/levels/Level10_MazeEscape';
+import { audioEngine } from '../../utils/audioEngine';
 import { 
   ArrowLeft, 
   Clock, 
-  Sparkles, 
   Pause, 
   Play, 
-  RotateCcw, 
-  Trophy, 
-  Star, 
-  Coins, 
-  Zap, 
   Layers 
 } from 'lucide-react';
 
@@ -65,6 +61,7 @@ export const GamePlayPage: React.FC = () => {
   const handleLevelWin = (score: number, stars: number) => {
     setWinData({ score, stars });
     completeLevel(selectedLevel.id, score, stars);
+    audioEngine.narrateTaskComplete();
   };
 
   const renderActiveLevelComponent = () => {
@@ -104,7 +101,10 @@ export const GamePlayPage: React.FC = () => {
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 sm:p-6 rounded-3xl bg-slate-900/90 border border-slate-800 backdrop-blur-md shadow-2xl">
           <div className="flex items-center gap-3">
             <button
-              onClick={() => setActivePage('level-select')}
+              onClick={() => {
+                audioEngine.playClick();
+                setActivePage('level-select');
+              }}
               className="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors"
               title="Return to Map"
             >
@@ -129,7 +129,10 @@ export const GamePlayPage: React.FC = () => {
 
             {/* Portal Shift */}
             <button
-              onClick={toggleWorld}
+              onClick={() => {
+                audioEngine.narratePortal();
+                toggleWorld();
+              }}
               className="p-2.5 rounded-xl bg-purple-950/80 border border-purple-500/50 text-purple-300 hover:scale-105 transition-all"
               title="Shift Dimensional View"
             >
@@ -138,7 +141,10 @@ export const GamePlayPage: React.FC = () => {
 
             {/* Pause Toggle */}
             <button
-              onClick={() => setIsPaused(!isPaused)}
+              onClick={() => {
+                audioEngine.playClick();
+                setIsPaused(!isPaused);
+              }}
               className="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors"
             >
               {isPaused ? <Play className="w-5 h-5 text-emerald-400" /> : <Pause className="w-5 h-5" />}
@@ -151,64 +157,19 @@ export const GamePlayPage: React.FC = () => {
           {renderActiveLevelComponent()}
         </div>
 
-        {/* Victory Modal */}
+        {/* Cartoon Treasure Chest Reward Modal */}
         {winData && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/90 backdrop-blur-md animate-in zoom-in">
-            <div className="relative w-full max-w-md bg-slate-900 border-2 border-emerald-500 rounded-3xl p-8 shadow-2xl text-slate-100 flex flex-col items-center text-center gap-6">
-              
-              <div className="w-16 h-16 rounded-2xl bg-emerald-500/20 border border-emerald-400 flex items-center justify-center text-emerald-400 shadow-xl">
-                <Trophy className="w-8 h-8 animate-bounce" />
-              </div>
-
-              <div>
-                <span className="text-xs font-bold text-emerald-400 uppercase tracking-widest">VICTORY CLEAR!</span>
-                <h2 className="text-2xl font-black text-slate-100 mt-1">Level {selectedLevel.id} Restored</h2>
-                <p className="text-xs text-slate-400 mt-1">{selectedLevel.fantasyTransformation}</p>
-              </div>
-
-              {/* Earned Stars */}
-              <div className="flex items-center gap-2">
-                {[1, 2, 3].map((s) => (
-                  <Star key={s} className="w-8 h-8 text-amber-400 fill-amber-400 animate-pulse" />
-                ))}
-              </div>
-
-              {/* Rewards */}
-              <div className="flex items-center justify-center gap-6 p-4 rounded-2xl bg-slate-950 border border-slate-800 w-full text-xs font-bold">
-                <div className="flex items-center gap-1.5 text-amber-400">
-                  <Coins className="w-4 h-4" />
-                  <span>+{selectedLevel.rewardCoins} Coins</span>
-                </div>
-                <div className="flex items-center gap-1.5 text-emerald-400">
-                  <Zap className="w-4 h-4" />
-                  <span>+{selectedLevel.rewardXP} XP</span>
-                </div>
-              </div>
-
-              {/* Next Controls */}
-              <div className="flex items-center gap-3 w-full">
-                <button
-                  onClick={() => {
-                    setWinData(null);
-                    setActivePage('level-select');
-                  }}
-                  className="w-1/2 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs uppercase tracking-wider"
-                >
-                  Map Overview
-                </button>
-
-                <button
-                  onClick={() => {
-                    setWinData(null);
-                    setActivePage('dashboard');
-                  }}
-                  className="w-1/2 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-slate-950 font-black text-xs uppercase tracking-wider shadow-lg shadow-emerald-500/20"
-                >
-                  Dashboard Hub
-                </button>
-              </div>
-            </div>
-          </div>
+          <RewardChestModal
+            coinsEarned={selectedLevel.rewardCoins}
+            xpEarned={selectedLevel.rewardXP}
+            starsEarned={winData.stars}
+            levelTitle={`Level ${selectedLevel.id}: ${selectedLevel.subtitle}`}
+            isOpen={!!winData}
+            onClose={() => {
+              setWinData(null);
+              setActivePage('level-select');
+            }}
+          />
         )}
       </div>
     </div>

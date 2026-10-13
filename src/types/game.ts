@@ -5,6 +5,7 @@ export type PageView =
   | 'character-select'
   | 'story-intro'
   | 'world-view'
+  | 'living-fantasy'
   | 'level-select'
   | 'gameplay'
   | 'inventory'
@@ -83,6 +84,7 @@ export interface PlayerStats {
   id: string;
   username: string;
   characterId: string;
+  customAvatarUrl?: string;
   xp: number;
   level: number;
   coins: number;
@@ -97,6 +99,19 @@ export interface PlayerStats {
   achievements: Achievement[];
   equippedTitle: string;
   createdAt: string;
+}
+
+export interface FantasyWorldCreation {
+  levelId: number;
+  title: string;
+  category: string;
+  iconName: string;
+  description: string;
+  lore: string;
+  previewUrl: string;
+  xPercentage: number;
+  yPercentage: number;
+  unlockedMessage: string;
 }
 
 export interface LeaderboardEntry {

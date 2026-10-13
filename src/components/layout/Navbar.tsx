@@ -1,6 +1,7 @@
 import React from 'react';
 import { useGame } from '../../context/GameContext';
 import { PageView } from '../../types/game';
+import { audioEngine } from '../../utils/audioEngine';
 import { 
   Compass, 
   Map, 
@@ -11,11 +12,9 @@ import {
   Sparkles, 
   Zap, 
   Coins, 
-  Flame, 
   Globe2, 
   Award,
-  Layers,
-  BookOpen
+  Layers
 } from 'lucide-react';
 
 export const Navbar: React.FC = () => {
@@ -29,15 +28,36 @@ export const Navbar: React.FC = () => {
   } = useGame();
 
   const navItems: { id: PageView; label: string; icon: React.ReactNode }[] = [
+    { id: 'auth', label: 'Login / Sign Up', icon: <User className="w-4 h-4 text-emerald-400" /> },
     { id: 'dashboard', label: 'Dashboard', icon: <Compass className="w-4 h-4" /> },
-    { id: 'world-view', label: 'Parallel Worlds', icon: <Globe2 className="w-4 h-4" /> },
-    { id: 'level-select', label: 'Map & Levels', icon: <Map className="w-4 h-4" /> },
-    { id: 'inventory', label: 'Vault', icon: <Package className="w-4 h-4" /> },
+    { id: 'living-fantasy', label: 'Living Fantasy Realm', icon: <Sparkles className="w-4 h-4 text-purple-400 animate-pulse" /> },
+    { id: 'world-view', label: '5-Stage Progression', icon: <Globe2 className="w-4 h-4" /> },
+    { id: 'level-select', label: 'Map & Levels', icon: <Map className="w-4 h-4 text-amber-400" /> },
+    { id: 'inventory', label: 'Vault & Pets', icon: <Package className="w-4 h-4" /> },
     { id: 'leaderboard', label: 'Ranks', icon: <Trophy className="w-4 h-4" /> },
     { id: 'achievements', label: 'Badges', icon: <Award className="w-4 h-4" /> },
     { id: 'profile', label: 'Profile', icon: <User className="w-4 h-4" /> },
     { id: 'settings', label: 'Settings', icon: <Settings className="w-4 h-4" /> },
   ];
+
+  const handleNavClick = (id: PageView, label: string) => {
+    audioEngine.playClick();
+    if (id === 'settings') {
+      audioEngine.narrateSettings();
+    } else if (id === 'inventory') {
+      audioEngine.speak('Opening Vault & Magical Companions');
+    } else if (id === 'world-view') {
+      audioEngine.speak('Entering 5-Stage World Progression Map');
+    } else {
+      audioEngine.speak(`Navigating to ${label}`);
+    }
+    setActivePage(id);
+  };
+
+  const handlePortalToggle = () => {
+    audioEngine.narratePortal();
+    toggleWorld();
+  };
 
   return (
     <header className="sticky top-0 z-40 w-full bg-slate-950/80 backdrop-blur-xl border-b border-slate-800/80 shadow-2xl transition-all">
@@ -47,7 +67,7 @@ export const Navbar: React.FC = () => {
           {/* Brand Logo & IIT Badge */}
           <div className="flex items-center gap-3">
             <button
-              onClick={() => setActivePage('landing')}
+              onClick={() => handleNavClick('landing', 'Landing Page')}
               className="flex items-center gap-2.5 group focus:outline-none"
             >
               <div className="relative w-9 h-9 rounded-xl bg-gradient-to-tr from-emerald-500 via-teal-400 to-cyan-500 p-0.5 shadow-lg shadow-emerald-500/20 group-hover:scale-105 transition-transform">
@@ -60,7 +80,7 @@ export const Navbar: React.FC = () => {
                   PARALLEL WORLDS
                 </span>
                 <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest -mt-1">
-                  IIT GAMETHON EDITION
+                  PARALLEL REALMS EDITION
                 </span>
               </div>
             </button>
@@ -73,7 +93,7 @@ export const Navbar: React.FC = () => {
               return (
                 <button
                   key={item.id}
-                  onClick={() => setActivePage(item.id)}
+                  onClick={() => handleNavClick(item.id, item.label)}
                   className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${
                     isActive
                       ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-md shadow-emerald-600/30'
@@ -92,8 +112,8 @@ export const Navbar: React.FC = () => {
             
             {/* World Warp Portal Button */}
             <button
-              onClick={toggleWorld}
-              className={`relative group flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-bold border shadow-lg transition-all hover:scale-105 active:scale-95 ${
+              onClick={handlePortalToggle}
+              className={`relative group flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-bold border shadow-lg transition-all hover:scale-105 active:scale-95 ${
                 activeWorld === 'fantasy'
                   ? 'bg-gradient-to-r from-purple-900/90 to-fuchsia-900/90 border-purple-500/60 text-purple-200 shadow-purple-500/20'
                   : 'bg-gradient-to-r from-slate-900/90 to-emerald-950/90 border-emerald-500/60 text-emerald-200 shadow-emerald-500/20'
@@ -148,7 +168,7 @@ export const Navbar: React.FC = () => {
 
             {/* Character Avatar Trigger */}
             <button
-              onClick={() => setActivePage('profile')}
+              onClick={() => handleNavClick('profile', 'Profile')}
               className="relative w-9 h-9 rounded-xl overflow-hidden border-2 border-emerald-500/60 shadow-md hover:ring-2 hover:ring-emerald-400 transition-all"
               title={`${activeCharacter.name} - ${activeCharacter.title}`}
             >
@@ -166,7 +186,7 @@ export const Navbar: React.FC = () => {
           {navItems.map((item) => (
             <button
               key={item.id}
-              onClick={() => setActivePage(item.id)}
+              onClick={() => handleNavClick(item.id, item.label)}
               className={`flex items-center gap-1 px-2.5 py-1 rounded-lg shrink-0 font-medium ${
                 activePage === item.id ? 'bg-emerald-600 text-white' : 'text-slate-400 hover:text-white'
               }`}
